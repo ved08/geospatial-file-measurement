@@ -1,0 +1,13 @@
+.venv/
+venv/
+**/__pycache__/
+*.py[cod]
+.pytest_cache/
+uploads/
+*.db
+.env
+.git/
+.DS_Store
+INTERVIEW_NOTES.md
+Dockerfile
+docker-compose.yml

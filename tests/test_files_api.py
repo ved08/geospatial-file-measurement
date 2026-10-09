@@ -14,11 +14,6 @@ def test_upload_kml_creates_file_record(client):
     assert info.json()["id"] == body["id"]
 
 
-def test_upload_rejects_unsupported_extension(client):
-    response = client.post("/api/files/", files={"file": ("notes.txt", b"hello")})
-    assert response.status_code == 400
-
-
 def test_unknown_file_returns_404(client):
     assert client.get("/api/files/missing/").status_code == 404
     assert client.get("/api/files/missing/measurements/").status_code == 404

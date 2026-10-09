@@ -1,13 +1,14 @@
 import uuid
 from datetime import datetime, timezone
-from pathlib import Path
 
 from fastapi import APIRouter, HTTPException, UploadFile, status
+from fastapi.concurrency import run_in_threadpool
 
 from app.core.config import settings
 from app.schemas.files import FileInfo, FileStatus, MeasurementsResponse
 from app.services.repository import repository
-from app.services.storage import save_upload
+from app.services.uploads import store_upload
+from app.services.validation import UploadValidationError, detect_file_type
 
 router = APIRouter(prefix="/files", tags=["files"])
 
@@ -22,24 +23,25 @@ def _get_file_or_404(file_id: str) -> FileInfo:
 @router.post("/", response_model=FileInfo, status_code=status.HTTP_201_CREATED)
 async def upload_file(file: UploadFile) -> FileInfo:
     """Upload a .zip (Shapefile) or .kml file for processing."""
-    extension = Path(file.filename or "").suffix.lower()
-    if extension not in settings.allowed_extensions:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail=f"Unsupported file type '{extension}'. Allowed: {', '.join(settings.allowed_extensions)}",
-        )
-
     file_id = uuid.uuid4().hex
-    await save_upload(file_id, file)
+    try:
+        file_type = detect_file_type(file.filename)
+        # Saving and validating block (disk writes, XML parsing, zip extraction);
+        # run them in a worker thread so other requests are served meanwhile.
+        stored = await run_in_threadpool(
+            store_upload, file.file, file.filename, file_type, settings.upload_dir / file_id
+        )
+    except UploadValidationError as exc:
+        raise HTTPException(status_code=exc.status_code, detail=exc.message) from None
 
     record = FileInfo(
         id=file_id,
-        filename=file.filename,
+        filename=stored.filename,
         status=FileStatus.PENDING,
         created_at=datetime.now(timezone.utc),
     )
     repository.add(record)
-    # TODO: parse features and compute measurements, then mark COMPLETED/FAILED.
+    # TODO: read features from stored.dataset_path, compute measurements, mark COMPLETED/FAILED.
     return record
 
 

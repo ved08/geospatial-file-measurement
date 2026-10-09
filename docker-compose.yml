@@ -1,0 +1,22 @@
+services:
+  api:
+    build:
+      context: .
+      target: runtime
+    ports:
+      - "8000:8000"
+    environment:
+      GEO_UPLOAD_DIR: /app/uploads
+    volumes:
+      - uploads:/app/uploads
+    restart: unless-stopped
+
+  # Run with: docker compose run --rm tests
+  tests:
+    build:
+      context: .
+      target: dev
+    profiles: ["test"]
+
+volumes:
+  uploads:
