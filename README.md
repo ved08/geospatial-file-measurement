@@ -2,14 +2,14 @@
 
 ## Setup
 
-Live demo: https://geospatial-file-measurement-3l4f.onrender.com/docs (Render free tier: the first request after 15 minutes of inactivity can take 1–2 minutes while it wakes up, and stored files are reset on each restart).
+Live demo: https://geospatial-file-measurement-3l4f.onrender.com/docs (Render free tier: the first request after 15 minutes of inactivity can take 1–2 minutes while it wakes up).
 
 To run locally, Docker is required.
 
 ```bash
 docker compose up --build          # API on http://localhost:8000, Swagger UI at /docs
-docker compose run --rm tests      # run the test suite
 docker compose down                # stop (add -v to also delete stored files and the database)
+docker compose run --rm tests      # run the test suite
 ```
 
 ## API
