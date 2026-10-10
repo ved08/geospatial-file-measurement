@@ -39,6 +39,7 @@ Environment variables (prefix `GEO_`):
 | `GEO_MAX_UPLOAD_SIZE_MB` | `50` | Maximum upload size |
 | `GEO_MAX_EXTRACTED_SIZE_MB` | `500` | Maximum total size of a zip's contents |
 | `GEO_MAX_ZIP_ENTRIES` | `1000` | Maximum number of entries in a zip |
+| `GEO_DEFAULT_CRS` | unset | CRS to assume for files that don't define one (e.g. a shapefile without `.prj`). Unset means such files fail. |
 
 ## API
 
@@ -84,7 +85,7 @@ app/
     ├── storage.py       # Copies uploads to disk with a size limit
     ├── validation.py    # File-type, KML and shapefile-zip validation
     ├── repository.py    # File + measurement records (in-memory for now)
-    ├── processing.py    # Reads features from .zip/.kml (TODO)
+    ├── processing.py    # Reads all layers/features from a .kml or .shp
     └── measurement.py   # CRS reprojection + area/length (TODO)
 tests/                   # pytest suite
 ```

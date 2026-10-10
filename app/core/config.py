@@ -1,6 +1,9 @@
 from pathlib import Path
 
+from pydantic import field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
+from pyproj import CRS
+from pyproj.exceptions import CRSError
 
 
 class Settings(BaseSettings):
@@ -12,6 +15,19 @@ class Settings(BaseSettings):
     # Limits applied to .zip contents to guard against zip bombs.
     max_extracted_size_mb: int = 500
     max_zip_entries: int = 1000
+    # CRS to assume when a file doesn't define one (e.g. a shapefile without .prj).
+    # Unset by default: such files fail, because guessing can give silently wrong areas.
+    default_crs: str | None = None
+
+    @field_validator("default_crs")
+    @classmethod
+    def _validate_default_crs(cls, value: str | None) -> str | None:
+        if value is not None:
+            try:
+                CRS.from_user_input(value)
+            except CRSError as exc:
+                raise ValueError(f"Invalid default_crs {value!r}: {exc}") from exc
+        return value
 
 
 settings = Settings()

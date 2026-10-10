@@ -24,6 +24,7 @@ class FileInfo(BaseModel):
 
 class FeatureMeasurement(BaseModel):
     id: int
+    layer: str | None = None
     geometry_type: str | None
     geometry: dict[str, Any] | None
     crs: str | None
