@@ -2,7 +2,9 @@
 
 ## Setup
 
-Requires Docker.
+Live demo: https://geospatial-file-measurement-3l4f.onrender.com/docs (Render free tier: the first request after 15 minutes of inactivity can take 1–2 minutes while it wakes up, and stored files are reset on each restart).
+
+To run locally, Docker is required.
 
 ```bash
 docker compose up --build          # API on http://localhost:8000, Swagger UI at /docs
@@ -181,7 +183,6 @@ Measured in degrees, both are 0.0001 "square degrees", which hides that Oslo's s
 - Object storage (S3) for uploads, and Postgres with Alembic migrations
 - KMZ, GeoJSON, GeoPackage, and zips with several shapefiles
 - Correcting UTM's scale error near zone edges
-- Deleting raw uploads after processing
 - Authentication and rate limiting
 - PostGIS, if spatial queries are needed
 - Processing very large files in chunks, with keyset pagination
