@@ -7,8 +7,10 @@ services:
       - "8000:8000"
     environment:
       GEO_UPLOAD_DIR: /app/uploads
+      GEO_DATABASE_URL: sqlite:////app/data/app.db
     volumes:
       - uploads:/app/uploads
+      - data:/app/data
     restart: unless-stopped
 
   # Run with: docker compose run --rm tests
@@ -20,3 +22,4 @@ services:
 
 volumes:
   uploads:
+  data:

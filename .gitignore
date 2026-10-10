@@ -5,6 +5,7 @@ venv/
 .env
 .pytest_cache/
 uploads/
+data/
 *.db
 .DS_Store
 

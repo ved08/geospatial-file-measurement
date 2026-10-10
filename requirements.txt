@@ -2,11 +2,12 @@ fastapi>=0.115
 uvicorn[standard]>=0.30
 python-multipart>=0.0.9
 pydantic-settings>=2.4
+sqlalchemy>=2.0
 defusedxml>=0.7
 # Geospatial stack. pyogrio and pyproj wheels bundle GDAL and PROJ,
 # so no system GIS libraries are needed.
 geopandas>=1.0
-shapely>=2.0
+shapely>=2.1  # make_valid(method="structure")
 pyproj>=3.6
 pyogrio>=0.9
 numpy>=1.26

@@ -15,9 +15,11 @@ WORKDIR /app
 COPY requirements.txt .
 RUN pip install -r requirements.txt
 
+# Writable by the app user: uploaded files and the SQLite database. Named
+# volumes mounted here start out with this ownership.
 RUN useradd --create-home --uid 1000 appuser \
-    && mkdir -p /app/uploads \
-    && chown appuser:appuser /app/uploads
+    && mkdir -p /app/uploads /app/data \
+    && chown appuser:appuser /app/uploads /app/data
 
 COPY app ./app
 

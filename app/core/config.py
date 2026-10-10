@@ -11,6 +11,10 @@ class Settings(BaseSettings):
 
     app_name: str = "Geospatial File Measurement API"
     upload_dir: Path = Path("uploads")
+    # SQLAlchemy URL. The default SQLite file (relative to the working directory)
+    # needs no server; e.g. GEO_DATABASE_URL=postgresql+psycopg://user:pw@host/db
+    # would work too once a driver (psycopg) is installed.
+    database_url: str = "sqlite:///./data/app.db"
     max_upload_size_mb: int = 50
     # Limits applied to .zip contents to guard against zip bombs.
     max_extracted_size_mb: int = 500

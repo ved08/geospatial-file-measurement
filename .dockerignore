@@ -4,6 +4,7 @@ venv/
 *.py[cod]
 .pytest_cache/
 uploads/
+data/
 *.db
 .env
 .git/
