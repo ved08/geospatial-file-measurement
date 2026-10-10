@@ -1,0 +1,17 @@
+# Render Blueprint: https://render.com/docs/blueprint-spec
+# Free plan: no persistent disk, so uploads and the SQLite database are reset on
+# every restart or redeploy, and the service sleeps after 15 minutes without traffic.
+services:
+  - type: web
+    name: geospatial-file-measurement
+    runtime: docker
+    plan: free
+    region: singapore
+    dockerfilePath: ./Dockerfile
+    healthCheckPath: /health
+    autoDeployTrigger: commit
+    envVars:
+      # Render terminates HTTPS at its proxy; trust its X-Forwarded-* headers so
+      # redirects (e.g. adding a trailing slash) keep the https:// scheme.
+      - key: FORWARDED_ALLOW_IPS
+        value: "*"
